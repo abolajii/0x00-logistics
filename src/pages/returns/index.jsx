@@ -1,7 +1,9 @@
 // import React from "react";
 
+import { Container } from "../../components";
+
 const Returns = () => {
-  return <div>Returns</div>;
+  return <Container>Returns</Container>;
 };
 
 export default Returns;

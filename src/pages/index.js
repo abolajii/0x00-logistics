@@ -1,3 +1,12 @@
 export { default as Jobs } from "./jobs";
+export { default as CreateJob } from "./jobs/create.job";
+export { default as SingleJob } from "./jobs/single.job";
+export { default as CreateExpense } from "./expense/create";
+export { default as SingleTransaction } from "./transactions/single.transaction";
+export { default as Settings } from "./settings";
+export { default as Expense } from "./expense";
+export { default as Clients } from "./clients";
+export { default as Reports } from "./reports";
 export { default as Returns } from "./returns";
+export { default as Transactions } from "./transactions";
 export { default as Dashboard } from "./dashboard";
