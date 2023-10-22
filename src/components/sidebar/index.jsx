@@ -16,20 +16,20 @@ const Sidebar = () => {
       name: "Jobs",
     },
     {
-      path: "/transactions",
-      name: "Transactions",
-    },
-    {
       path: "/expense",
       name: "Expense",
     },
     {
-      path: "/reports",
-      name: "Reports",
-    },
-    {
       path: "/clients",
       name: "Clients",
+    },
+    {
+      path: "/transactions",
+      name: "Transactions",
+    },
+    {
+      path: "/reports",
+      name: "Reports",
     },
 
     {

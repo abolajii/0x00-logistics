@@ -5,6 +5,8 @@ const useExpense = create((set) => ({
     expense: "",
     amount: "",
   },
+  multipleExpenses: [],
+  setMultipleExpenses: (multipleExpenses) => set({ multipleExpenses }),
   setFormValue: (field, value) =>
     set((state) => ({
       formValues: { ...state.formValues, [field]: value },

@@ -1,29 +1,15 @@
 import styled from "styled-components";
 
-const CreateJob = styled.div`
-  background-color: #426b69;
-  color: #fff;
-  padding: 12px;
-  display: inline-flex;
-  padding: 10px 39px;
-  border-radius: 7px;
-  font-family: Lato;
-
-  &:hover {
-    background-color: rgba(65, 107, 105, 0.95);
-  }
-`;
-
 const GoBack = styled.button`
   text-decoration: underline;
   font-family: Lato;
 `;
 
 const Box = styled.div`
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 90px 4px;
-  border-radius: 20px;
+  /* box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 90px 4px; */
+  /* border-radius: 20px; */
   height: 400px;
-  padding: 20px;
+  /* padding: 20px; */
   font-family: Lato;
 `;
 
@@ -38,19 +24,40 @@ const Form = styled.form`
     display: flex;
     flex-direction: column;
     margin: 10px 0;
+    position: relative;
   }
   label {
     margin: 10px 0;
+  }
+
+  .input-container {
+    padding-right: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: border-color 0.2s;
+    input {
+      border: none;
+    }
+
+    .icon {
+      height: 20px;
+      width: 20px;
+      transform: rotate(0deg);
+    }
+    .rotated {
+      transform: rotate(180deg);
+    }
   }
   input {
     /* width: 350px; Set a fixed width for the input fields */
     padding: 10px;
     width: 500px; /* Set a fixed width for the input fields */
-
     border: 1px solid #ccc;
     border-radius: 4px;
     transition: border-color 0.2s;
-
     &::placeholder {
       font-family: Lato;
     }
@@ -69,10 +76,10 @@ const Form = styled.form`
 `;
 
 const JobDetailsContainer = styled.div`
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 90px 4px;
+  /* box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 90px 4px; */
   border-radius: 20px;
   min-height: 400px;
-  padding: 20px;
+  /* padding: 20px; */
   font-family: Lato;
 
   h2 {
@@ -99,6 +106,7 @@ const ValueBox = styled.div`
   height: 40px;
   display: flex;
   align-items: center;
+  width: 300px;
 `;
 
-export { CreateJob, GoBack, Form, JobDetailsContainer, Box, ValueBox };
+export { GoBack, Form, JobDetailsContainer, Box, ValueBox };

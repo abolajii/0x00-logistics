@@ -36,6 +36,7 @@ ul {
 
 input {
   outline: none;
+  border: none;
 }
 
 /* button:hover {
@@ -120,4 +121,8 @@ button:focus-visible {
 .gap-3 {
   gap: 30px;
   margin-top: 20px;
+}
+
+.w-100 {
+  width: 100%;
 }

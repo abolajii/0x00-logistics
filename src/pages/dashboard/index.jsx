@@ -5,7 +5,6 @@ import { formatBalance, fullDate } from "../../helper";
 
 import React from "react";
 import { useExpense } from "../expense/hook/useExpense";
-import { useJobStore } from "../jobs/hook/useJob";
 import { useTransaction } from "../transactions/hook/useTransaction";
 
 const Dashboard = () => {
@@ -38,30 +37,30 @@ const Dashboard = () => {
         <GridContainer>
           <Grid>
             <div className="top">
-              <p className="name">A-Quads Errands balance</p>
+              <div className="flex ai-center">
+                <p className="">A-Quads Errands balance</p>
+                <div
+                  className="center cursor icon"
+                  onClick={toggleBalanceVisibility}
+                >
+                  {!showBalance ? (
+                    <FiEyeOff size={14} color="#000" />
+                  ) : (
+                    <FiEye size={14} color="#000" />
+                  )}
+                </div>
+              </div>
               {showBalance ? (
                 <div className="flex ai-center">
                   <p className="bal">{formatBalance(totalNetProfit)}</p>
-                  <div
-                    className="center cursor icon"
-                    onClick={toggleBalanceVisibility}
-                  >
-                    <FiEye size={14} color="#000" />
-                  </div>
                 </div>
               ) : (
                 <div className="flex ai-center">
                   <div className="bal">₦*** · **</div>
-                  <div
-                    className="center cursor icon"
-                    onClick={toggleBalanceVisibility}
-                  >
-                    <FiEyeOff size={14} color="#000" />
-                  </div>
                 </div>
               )}
             </div>
-            <p className="date">17 Oct, 2023.</p>
+            <p className="date">19 Oct, 2023.</p>
           </Grid>
         </GridContainer>
       </Inner>

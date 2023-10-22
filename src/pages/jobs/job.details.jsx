@@ -1,5 +1,6 @@
 import { JobDetailsContainer, ValueBox } from "./styles";
 
+import { formatBalance } from "../../helper";
 import { useJobStore } from "./hook/useJob";
 
 const JobDetails = () => {
@@ -22,7 +23,9 @@ const JobDetails = () => {
       </div>
       <div className="field">
         <p>Amount</p>
-        <ValueBox>{formValues.amount}</ValueBox>
+        <ValueBox>
+          {formValues.amount && formatBalance(Number(formValues.amount))}
+        </ValueBox>
       </div>
 
       <div className="field">

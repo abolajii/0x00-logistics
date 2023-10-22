@@ -5,7 +5,8 @@ const ButtonContainer = styled.button`
   background-color: #426b69;
   color: #fff;
   padding: 12px;
-  display: inline-flex;
+  /* display: inline-flex; */
+  text-align: center;
   padding: 10px 39px;
   border-radius: 4px;
   font-family: Lato;
@@ -19,11 +20,15 @@ const ButtonContainer = styled.button`
   &:active {
     background-color: #36544f; /* Adjust the color for the active effect */
   }
+
+  &.w-100 {
+    width: 100%;
+  }
 `;
 
-const Button = ({ title, onClick, type }) => {
+const Button = ({ title, onClick, type, className }) => {
   return (
-    <ButtonContainer onClick={onClick} type={type}>
+    <ButtonContainer onClick={onClick} type={type} className={className}>
       {title}
     </ButtonContainer>
   );

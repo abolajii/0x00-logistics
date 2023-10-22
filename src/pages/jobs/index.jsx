@@ -1,6 +1,5 @@
-import { Container, Small } from "../../components";
+import { Button, Container, Small } from "../../components";
 
-import { CreateJob } from "./styles";
 import React from "react";
 import Table from "./table";
 import axios from "axios";
@@ -37,12 +36,7 @@ const Jobs = () => {
     <Container title="Jobs">
       <div className="flex ai-center justify-between">
         <Small title={`Jobs (${length})`} />
-        <CreateJob
-          className="center cursor"
-          onClick={() => navigate("/job/create")}
-        >
-          Create job
-        </CreateJob>
+        <Button title="Create" onClick={() => navigate("/job/create")} />
       </div>
       <Table />
     </Container>

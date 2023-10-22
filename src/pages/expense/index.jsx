@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 const url = "http://localhost:6600";
 
 const Expense = () => {
-  const { setExpenses } = useExpense();
+  const { setExpenses, expenses } = useExpense();
 
   const navigate = useNavigate();
 
@@ -33,7 +33,7 @@ const Expense = () => {
   return (
     <Container title="Expense">
       <div className="flex ai-center justify-between">
-        <Small title="Expense" />
+        <Small title={`Expense (${expenses.length})`} />
         <Button title="Create" onClick={() => navigate("/expense/create")} />
       </div>
       <Table />

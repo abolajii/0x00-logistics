@@ -1,19 +1,23 @@
-import { Box, Form, GoBack } from "./styles";
-import { Button, Container } from "../../components";
-import { Link, useNavigate } from "react-router-dom";
+import { Box, Form } from "./styles";
+import { Button, Container, Small } from "../../components";
 
+import { BiSolidUpArrow } from "react-icons/bi";
+import Dropdown from "./components/dropdown";
 import JobDetails from "./job.details";
+import React from "react";
 import axios from "axios";
+import { clsx } from "clsx";
 import { useJobStore } from "./hook/useJob";
 import useModalStore from "../../components/loading/hook/useModalStore";
-
-// import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const url = "http://localhost:6600";
 
 const CreateJob = () => {
   const { step, setStep, formValues, setFormValue, clicked, setClicked } =
     useJobStore();
+
+  const [isRotated, setIsRotated] = React.useState(false);
 
   const { openModal, closeModal } = useModalStore();
   const navigate = useNavigate();
@@ -43,6 +47,17 @@ const CreateJob = () => {
   };
 
   const submitJob = async (e) => {
+    setClicked(true);
+
+    if (
+      !formValues.customerName ||
+      !formValues.pickUp ||
+      !formValues.amount ||
+      !formValues.payer
+    ) {
+      return;
+    }
+
     e.preventDefault();
     openModal();
 
@@ -56,11 +71,14 @@ const CreateJob = () => {
     }
   };
 
+  const handleIconClick = () => {
+    // Toggle the rotation class
+    setIsRotated((prev) => !prev);
+  };
+
   return (
-    <Container title="Create Job">
-      <GoBack>
-        <Link to="/jobs">All Jobs</Link>
-      </GoBack>
+    <Container title="Job">
+      <Small title="New Job" />
       <div className="flex justify-between gap-3">
         <Box className="flex-1">
           <Form>
@@ -68,22 +86,35 @@ const CreateJob = () => {
               <>
                 <div className="field">
                   <label>Customer Name:</label>
-                  <input
-                    type="text"
-                    value={formValues.customerName}
-                    onChange={(e) =>
-                      setFormValue("customerName", e.target.value)
-                    }
-                    required
-                    placeholder="Customer name"
-                    style={{
-                      borderColor:
-                        clicked && !formValues.customerName ? "red" : "#ccc",
-                    }}
-                  />
+                  <div className="input-container">
+                    <input
+                      type="text"
+                      value={formValues.customerName}
+                      onChange={(e) =>
+                        setFormValue("customerName", e.target.value)
+                      }
+                      required
+                      placeholder="Customer name"
+                      style={{
+                        borderColor:
+                          clicked && !formValues.customerName ? "red" : "#ccc",
+                      }}
+                    />
+                    <div
+                      onClick={handleIconClick}
+                      className={clsx(
+                        `icon center cursor`,
+                        isRotated && "rotated"
+                      )}
+                    >
+                      <BiSolidUpArrow size={10} />
+                    </div>
+                  </div>
+
                   {formValues.customerName === "" && clicked && (
                     <div className="error">This field is required</div>
                   )}
+                  {isRotated && <Dropdown />}
                 </div>
                 <div className="field">
                   <label>Pickup Location:</label>

@@ -2,6 +2,7 @@
 
 import {
   Clients,
+  CreateClient,
   CreateExpense,
   CreateJob,
   Dashboard,
@@ -32,6 +33,7 @@ const App = () => {
         <Route element={<SingleTransaction />} path="/transaction/:id" />
         <Route path="/reports" element={<Reports />} />
         <Route path="/clients" element={<Clients />} />
+        <Route element={<CreateClient />} path="/client/create" />
         <Route path="/expense" element={<Expense />} />
         <Route path="/expense/create" element={<CreateExpense />} />
         <Route path="/settings" element={<Settings />} />
