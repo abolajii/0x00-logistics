@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 // RadioButton.js
-import React from "react";
+// import React from "react";
 
 const RadioButton = ({ value, selectedValue, onSelect }) => {
   return (
@@ -11,9 +11,9 @@ const RadioButton = ({ value, selectedValue, onSelect }) => {
         checked={value === selectedValue}
         onChange={() => onSelect(value)}
       />
-      <label>
+      <div className="radio-text">
         <p className="text">{value}</p>
-      </label>
+      </div>
     </div>
   );
 };

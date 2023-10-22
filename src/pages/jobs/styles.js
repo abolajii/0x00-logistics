@@ -11,19 +11,39 @@ const Box = styled.div`
   height: 400px;
   /* padding: 20px; */
   font-family: Lato;
+
+  .max-locations-reached {
+    font-size: 13px;
+  }
 `;
 
-const Form = styled.form`
+const Form = styled.div`
+  strong {
+    text-transform: capitalize;
+  }
+
   width: 500px; /* Set a fixed width for the input fields */
+
+  .radio-text {
+    margin: 0 5px;
+  }
 
   .btn-container {
     margin-top: 40px;
   }
 
+  .button {
+    margin-left: 5px;
+  }
+
+  .delivery-location {
+    margin-bottom: 15px;
+  }
+
   div.field {
     display: flex;
     flex-direction: column;
-    margin: 10px 0;
+    /* margin: 10px 0; */
     position: relative;
   }
   label {
@@ -39,7 +59,7 @@ const Form = styled.form`
     border-radius: 4px;
     transition: border-color 0.2s;
     input {
-      border: none;
+      border: none !important;
     }
 
     .icon {
@@ -51,7 +71,8 @@ const Form = styled.form`
       transform: rotate(180deg);
     }
   }
-  input {
+
+  input:not([type="radio"]) {
     /* width: 350px; Set a fixed width for the input fields */
     padding: 10px;
     width: 500px; /* Set a fixed width for the input fields */
@@ -107,6 +128,7 @@ const ValueBox = styled.div`
   display: flex;
   align-items: center;
   width: 300px;
+  text-transform: capitalize;
 `;
 
 export { GoBack, Form, JobDetailsContainer, Box, ValueBox };

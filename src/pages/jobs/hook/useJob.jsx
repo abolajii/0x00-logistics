@@ -2,6 +2,8 @@
 import { create } from "zustand";
 
 const useJobStore = create((set) => ({
+  deliveryLocations: [{ amount: 0, delivery: "" }],
+  setDeliveryLocations: (deliveryLocations) => set({ deliveryLocations }),
   job: {},
   setJob: (job) => set({ job }),
   jobs: [],
