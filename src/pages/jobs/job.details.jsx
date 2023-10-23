@@ -38,7 +38,7 @@ const JobDetails = ({ multipleJobs }) => {
         {multipleJobs ? (
           <ValueBox>{deliveryNames.join(", ")}</ValueBox>
         ) : (
-          <ValueBox>{formValues.delivery || deliveryNames[0]}</ValueBox>
+          <ValueBox>{formValues.delivery}</ValueBox>
         )}
       </div>
       <div className="field">

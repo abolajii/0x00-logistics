@@ -43,7 +43,7 @@ const Form = styled.div`
   div.field {
     display: flex;
     flex-direction: column;
-    /* margin: 10px 0; */
+    margin: 10px 0;
     position: relative;
   }
   label {

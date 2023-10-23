@@ -40,6 +40,7 @@ const Column = styled.div`
   font-size: 15px;
   font-weight: 700;
   line-height: 150%; /* 22.5px */
+  text-transform: capitalize;
 `;
 const HeaderColumn = styled(Column)`
   color: ${colors.textThree};

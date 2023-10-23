@@ -21,6 +21,7 @@ const Column = styled.div`
   color: ${colors.textOne};
   font-size: 14px;
   font-weight: 700;
+  text-transform: capitalize;
 `;
 
 const HeaderColumn = styled(Column)`

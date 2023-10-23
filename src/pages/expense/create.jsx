@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { Box, ExpenseContainer, ExpenseForm, ValueBox } from "./styles";
-import { Button, Container, Small } from "../../components";
+import { Button, Container, CustomCheckbox, Small } from "../../components";
 
 import { MdDelete } from "react-icons/md";
 import QuickClick from "./quick.click";
@@ -129,15 +129,17 @@ const CreateExpense = () => {
             <div className="field">
               <label>Expense Type:</label>
               <div className="flex">
-                <RadioButton
-                  value="Single"
-                  selectedValue={multipleExpense ? "Multiple" : "Single"}
-                  onSelect={(value) => setMultipleExpense(value === "Multiple")}
+                <CustomCheckbox
+                  value="single"
+                  label="Single"
+                  checkedValue={multipleExpense ? "multiple" : "single"}
+                  onChange={(value) => setMultipleExpense(value === "multiple")}
                 />
-                <RadioButton
-                  value="Multiple"
-                  selectedValue={multipleExpense ? "Multiple" : "Single"}
-                  onSelect={(value) => setMultipleExpense(value === "Multiple")}
+                <CustomCheckbox
+                  value="multiple"
+                  label="Multiple"
+                  checkedValue={multipleExpense ? "multiple" : "single"}
+                  onChange={(value) => setMultipleExpense(value === "multiple")}
                 />
               </div>
             </div>
@@ -195,7 +197,10 @@ const CreateExpense = () => {
               </Box>
               <Box>
                 <p>Amount</p>
-                <ValueBox>{formatBalance(Number(formValues.amount))}</ValueBox>
+                <ValueBox>
+                  {formValues.amount !== "" &&
+                    formatBalance(Number(formValues.amount))}
+                </ValueBox>
               </Box>
             </>
           )}

@@ -8,6 +8,7 @@ const CheckboxContainer = styled.label`
   align-items: center;
   cursor: pointer;
   user-select: none;
+  margin: 0 !important;
 
   p {
     margin-right: 20px;
@@ -51,6 +52,10 @@ const CustomCheckbox = ({ label, value, checkedValue, onChange }) => {
     "not-paid": "#e53b3b",
     canceled: "#ff7a7a",
     "next-day": "#ffcc00",
+    "Pick up": "#ff3323",
+    delivery: "#e21122",
+    single: "#007bff",
+    multiple: "#4CAF50",
     // Add more background colors for other labels here
   };
   const isChecked = value === checkedValue;

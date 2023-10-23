@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { Box, Form } from "./styles";
-import { Button, Container, Small } from "../../components";
+import { Button, Container, CustomCheckbox, Small } from "../../components";
 
 import { BiSolidUpArrow } from "react-icons/bi";
 import Dropdown from "./components/dropdown";
@@ -9,6 +9,7 @@ import RadioButton from "../expense/radiobutton";
 import React from "react";
 import axios from "axios";
 import { clsx } from "clsx";
+import { useClient } from "../clients/hook/useClient";
 import { useJobStore } from "./hook/useJob";
 import useModalStore from "../../components/loading/hook/useModalStore";
 import { useNavigate } from "react-router-dom";
@@ -35,14 +36,33 @@ const CreateJob = () => {
 
   const [maxLocationsReached, setMaxLocationsReached] = React.useState(false);
 
-  const [multipleJobs, setMultipleJobs] = React.useState(false); // State to track multiple expense mode
+  const [jobType, setJobType] = React.useState("single"); // State to track multiple expense mode
 
   const { openModal, closeModal } = useModalStore();
   const navigate = useNavigate();
 
+  const { setClients, clients } = useClient();
+
+  const getAllClients = async () => {
+    return await axios.get(`${url}/clients`);
+  };
+
+  React.useEffect(() => {
+    const allClients = async () => {
+      try {
+        const response = await getAllClients();
+        setClients(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    allClients();
+  }, [setClients]);
+
   const handleNext = () => {
     setClicked(true);
-    if (multipleJobs) {
+    if (jobType === "multiple") {
       if (
         !formValues.customerName ||
         !formValues.pickUp ||
@@ -69,9 +89,6 @@ const CreateJob = () => {
   };
 
   const handlePrev = () => {
-    if (multipleJobs) {
-      setStep(1);
-    }
     setStep(1);
   };
 
@@ -124,10 +141,31 @@ const CreateJob = () => {
     setClicked(true);
     e.preventDefault();
 
-    // openModal();
+    if (
+      jobType === "multiple" &&
+      (!formValues.customerName ||
+        !formValues.pickUp ||
+        !formValues.payer ||
+        deliveryLocations[0].delivery == "")
+    ) {
+      return;
+    }
+
+    if (
+      jobType === "single" &&
+      (!formValues.customerName ||
+        !formValues.pickUp ||
+        !formValues.delivery ||
+        !formValues.amount ||
+        !formValues.payer)
+    ) {
+      return;
+    }
+
+    openModal();
     const { amount, delivery, ...noAmount } = formValues;
 
-    if (multipleJobs) {
+    if (jobType === "multiple") {
       const formData = {
         ...noAmount,
         deliveryLocations,
@@ -171,6 +209,10 @@ const CreateJob = () => {
     setDeliveryLocations(updatedLocations);
   };
 
+  const handleJobTypeChange = (value) => {
+    setJobType(value);
+  };
+
   return (
     <Container title="Job">
       <Small title="New Job" />
@@ -198,15 +240,17 @@ const CreateJob = () => {
                       required
                       placeholder="Customer name"
                     />
-                    <div
-                      onClick={handleIconClick}
-                      className={clsx(
-                        `icon center cursor`,
-                        isRotated && "rotated"
-                      )}
-                    >
-                      <BiSolidUpArrow size={10} />
-                    </div>
+                    {clients.length > 0 && (
+                      <div
+                        onClick={handleIconClick}
+                        className={clsx(
+                          `icon center cursor`,
+                          isRotated && "rotated"
+                        )}
+                      >
+                        <BiSolidUpArrow size={10} />
+                      </div>
+                    )}
                   </div>
 
                   {formValues.customerName === "" && clicked && (
@@ -234,24 +278,22 @@ const CreateJob = () => {
                 <div className="field">
                   <label>Delivery Type:</label>
                   <div className="flex">
-                    <RadioButton
-                      value="Single"
-                      selectedValue={multipleJobs ? "Multiple" : "Single"}
-                      onSelect={(value) =>
-                        setMultipleJobs(value === "Multiple")
-                      }
+                    <CustomCheckbox
+                      value="single"
+                      label="Single"
+                      checkedValue={jobType}
+                      onChange={handleJobTypeChange}
                     />
-                    <RadioButton
-                      value="Multiple"
-                      selectedValue={multipleJobs ? "Multiple" : "Single"}
-                      onSelect={(value) =>
-                        setMultipleJobs(value === "Multiple")
-                      }
+                    <CustomCheckbox
+                      value="multiple"
+                      label="Multiple"
+                      checkedValue={jobType}
+                      onChange={(val) => handleJobTypeChange(val)}
                     />
                   </div>
                 </div>
 
-                {multipleJobs ? (
+                {jobType === "multiple" ? (
                   <div>
                     <div className="field">
                       <label>Delivery Location(s):</label>
@@ -325,9 +367,7 @@ const CreateJob = () => {
                     <label>Delivery Location:</label>
                     <input
                       type="text"
-                      value={
-                        formValues.delivery || deliveryLocations[0].delivery
-                      }
+                      value={formValues.delivery}
                       onChange={(e) => setFormValue("delivery", e.target.value)}
                       required
                       placeholder="Delivery"
@@ -345,7 +385,7 @@ const CreateJob = () => {
             )}
             {step === 2 && (
               <>
-                {multipleJobs &&
+                {jobType === "multiple" &&
                   deliveryLocations.map((label, index) => (
                     <div className="field" key={index}>
                       <label>
@@ -373,7 +413,7 @@ const CreateJob = () => {
                       )}
                     </div>
                   ))}
-                {!multipleJobs && (
+                {jobType !== "multiple" && (
                   <div className="field">
                     <label>Amount:</label>
                     <input
@@ -394,7 +434,24 @@ const CreateJob = () => {
 
                 <div className="field">
                   <label>Who Is Paying:</label>
-                  <input
+                  <div className="flex">
+                    <CustomCheckbox
+                      value="Pick up"
+                      onChange={(e) => setFormValue("payer", e)}
+                      required
+                      label="Pick up"
+                      checkedValue={formValues.payer}
+                    />
+                    <CustomCheckbox
+                      value="delivery"
+                      onChange={(e) => setFormValue("payer", e)}
+                      required
+                      label="Delivery"
+                      checkedValue={formValues.payer}
+                    />
+                  </div>
+
+                  {/* <input
                     type="text"
                     value={formValues.payer}
                     onChange={(e) => setFormValue("payer", e.target.value)}
@@ -403,7 +460,7 @@ const CreateJob = () => {
                       borderColor:
                         clicked && !formValues.payer ? "red" : "#ccc",
                     }}
-                  />
+                  /> */}
                   {formValues.payer === "" && clicked && (
                     <div className="error">This field is required</div>
                   )}
@@ -420,13 +477,6 @@ const CreateJob = () => {
                   <Button onClick={handlePrev} title="Prev" />
                 </div>
               )}
-              {/* <Button
-                type="submit"
-                onClick={(e) =>
-                  handleSubmit(e, step, step === 1 ? "Next" : "Prev")
-                }
-                title={step === 1 ? "Next" : "Prev"}
-              /> */}
 
               {step === 2 && (
                 <Button type="submit" onClick={submitJob} title={"Create"} />
@@ -437,7 +487,7 @@ const CreateJob = () => {
         {/*  */}
 
         <div className="flex-1">
-          <JobDetails multipleJobs={multipleJobs} />
+          <JobDetails multipleJobs={jobType === "multiple"} />
         </div>
       </div>
     </Container>

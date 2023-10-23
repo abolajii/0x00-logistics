@@ -64,7 +64,7 @@ const Sidebar = () => {
             </li>
           ))}
           <li>
-            <Link>Logout</Link>
+            <Link to="/login">Logout</Link>
           </li>
         </ul>
       </SidebarMenuTwo>

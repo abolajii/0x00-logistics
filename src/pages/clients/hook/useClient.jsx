@@ -1,6 +1,8 @@
 import { create } from "zustand";
 
 const useClient = create((set) => ({
+  mounted: true,
+  setMounted: (mounted) => set({ mounted }),
   formValues: {
     name: "",
     phone: "",

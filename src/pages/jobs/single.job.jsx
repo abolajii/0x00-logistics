@@ -115,6 +115,7 @@ const Bottom = styled.div`
     padding: 16px;
     margin-top: 10px;
     width: 270px;
+    text-transform: capitalize;
   }
 
   .bottom-title {

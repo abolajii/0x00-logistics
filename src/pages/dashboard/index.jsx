@@ -1,30 +1,33 @@
 import { Container, Small } from "../../components";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { Grid, GridContainer, Inner } from "./styles";
-import { formatBalance, fullDate } from "../../helper";
 
 import React from "react";
-import { useExpense } from "../expense/hook/useExpense";
-import { useTransaction } from "../transactions/hook/useTransaction";
+import axios from "axios";
+import { formatBalance } from "../../helper";
 
 const Dashboard = () => {
   const [showBalance, setShowBalance] = React.useState(false);
+  const [profit, setProfit] = React.useState(0);
 
-  const { expenses } = useExpense();
+  const url = "http://localhost:6600";
 
-  const { transactions } = useTransaction();
+  const getDashboard = async () => {
+    return await axios.get(`${url}/dashboard`);
+  };
 
-  const totalNetProfit = transactions.reduce((total, transaction) => {
-    const matchingExpenses = expenses.filter(
-      (expense) =>
-        fullDate(expense.createdAt) === fullDate(transaction.createdAt)
-    );
-    const totalExpenses = matchingExpenses.reduce(
-      (total, expense) => total + expense.amount,
-      0
-    );
-    return total + (transaction.totalAmountPaid - totalExpenses);
-  }, 0);
+  React.useEffect(() => {
+    const dashboardDetails = async () => {
+      try {
+        const response = await getDashboard();
+        setProfit(response.data.netProfit);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    dashboardDetails();
+  }, []);
 
   // Function to toggle the visibility of the balance
   const toggleBalanceVisibility = () => {
@@ -52,7 +55,7 @@ const Dashboard = () => {
               </div>
               {showBalance ? (
                 <div className="flex ai-center">
-                  <p className="bal">{formatBalance(totalNetProfit)}</p>
+                  <p className="bal">{formatBalance(profit)}</p>
                 </div>
               ) : (
                 <div className="flex ai-center">

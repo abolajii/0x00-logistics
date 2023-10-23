@@ -25,6 +25,7 @@ const Container = styled.div`
 const Item = styled.div`
   padding: 10px;
   cursor: pointer;
+  text-transform: capitalize;
 
   &:hover {
     background: #f0f0f0; /* Change the background color on hover */

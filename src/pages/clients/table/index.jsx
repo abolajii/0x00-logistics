@@ -57,7 +57,7 @@ const Table = () => {
               const { id, key } = column;
               return (
                 <Column key={id}>
-                  {key === "totalAmount"
+                  {key === "totalJobAmount"
                     ? formatBalance(each[key])
                     : key === "lastJobDate"
                     ? each[key] === null
