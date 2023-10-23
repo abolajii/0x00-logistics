@@ -123,9 +123,7 @@ const CreateExpense = () => {
                 <div className="error">This field is required</div>
               )}
             </div>
-            {/*  */}
-            {/* Add a radio button here for either a single expense or multiple expenses*/}
-            {/* Radio buttons for single/multiple expense */}
+
             <div className="field">
               <label>Expense Type:</label>
               <div className="flex">

@@ -9,5 +9,7 @@ export { default as Clients } from "./clients";
 export { default as CreateClient } from "./clients/create";
 export { default as Reports } from "./reports";
 export { default as Returns } from "./returns";
+export { default as Login } from "./login";
+export { default as Register } from "./register";
 export { default as Transactions } from "./transactions";
 export { default as Dashboard } from "./dashboard";

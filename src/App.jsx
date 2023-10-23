@@ -8,6 +8,8 @@ import {
   Dashboard,
   Expense,
   Jobs,
+  Login,
+  Register,
   Reports,
   Returns,
   Settings,
@@ -25,6 +27,8 @@ const App = () => {
       <Loading />
       <Routes>
         <Route element={<Dashboard />} path="/" />
+        <Route element={<Login />} path="/login" />
+        <Route element={<Register />} path="/register" />
         <Route element={<Jobs />} path="/jobs" />
         <Route element={<SingleJob />} path="/job/:id" />
         <Route element={<CreateJob />} path="/job/create" />
