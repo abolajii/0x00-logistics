@@ -5,16 +5,13 @@ import { Button, Container, CustomCheckbox, Small } from "../../components";
 import { BiSolidUpArrow } from "react-icons/bi";
 import Dropdown from "./components/dropdown";
 import JobDetails from "./job.details";
-import RadioButton from "../expense/radiobutton";
+import { LMAuth } from "../../service/api.service";
 import React from "react";
-import axios from "axios";
 import { clsx } from "clsx";
 import { useClient } from "../clients/hook/useClient";
 import { useJobStore } from "./hook/useJob";
 import useModalStore from "../../components/loading/hook/useModalStore";
 import { useNavigate } from "react-router-dom";
-
-const url = "http://localhost:6600";
 
 const CreateJob = () => {
   // const [deliveryLocations, setDeliveryLocations] = React.useState([""]);
@@ -44,7 +41,7 @@ const CreateJob = () => {
   const { setClients, clients } = useClient();
 
   const getAllClients = async () => {
-    return await axios.get(`${url}/clients`);
+    return await LMAuth.get(`/clients`);
   };
 
   React.useEffect(() => {
@@ -133,7 +130,7 @@ const CreateJob = () => {
   // };
 
   const createJob = async (data) => {
-    return axios.post(`${url}/create/job`, { data });
+    return LMAuth.post(`/create/job`, { data });
   };
 
   const submitJob = async (e) => {

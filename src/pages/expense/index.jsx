@@ -1,12 +1,10 @@
 import { Button, Container, Small } from "../../components";
 
+import { LMAuth } from "../../service/api.service";
 import React from "react";
 import Table from "./table";
-import axios from "axios";
 import { useExpense } from "./hook/useExpense";
 import { useNavigate } from "react-router-dom";
-
-const url = "http://localhost:6600";
 
 const Expense = () => {
   const { setExpenses, expenses } = useExpense();
@@ -14,7 +12,7 @@ const Expense = () => {
   const navigate = useNavigate();
 
   const getAllExpenses = async () => {
-    return await axios.get(`${url}/expenses`);
+    return await LMAuth.get(`/expenses`);
   };
 
   React.useEffect(() => {

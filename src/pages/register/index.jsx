@@ -1,11 +1,9 @@
 import { Error, FormBox, FormContainer, Input, LinkText } from "./styles";
 
 import { Button } from "../../components";
-import axios from "axios";
+import { LMNoAuth } from "../../service/api.service";
 import { useNavigate } from "react-router-dom";
 import { useRegister } from "./hook/useRegister";
-
-const url = "http://localhost:6600";
 
 const Registration = () => {
   const { formValues, setFormValue, clicked, setClicked } = useRegister();
@@ -13,7 +11,7 @@ const Registration = () => {
   const navigate = useNavigate();
 
   const createUser = async (data) => {
-    return axios.post(`${url}/create/user`, { data });
+    return LMNoAuth.post(`/create/user`, { data });
   };
 
   const handleSubmit = async (e) => {

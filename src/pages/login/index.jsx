@@ -1,27 +1,29 @@
 import { Error, FormBox, FormContainer, Input, LinkText } from "./styles";
 
 import { Button } from "../../components";
-import axios from "axios";
+import { LMNoAuth } from "../../service/api.service";
+import { saveTokensToStorage } from "../../helper";
 // import React from "react";
 import { useLogin } from "./hook/useLogin";
+import useModalStore from "../../components/loading/hook/useModalStore";
 import { useNavigate } from "react-router-dom";
-
-const url = "http://localhost:6600";
 
 const Login = () => {
   const { formValues, setFormValue, clicked, setClicked, setLoggedInUser } =
     useLogin();
+  const { openModal, closeModal } = useModalStore();
 
   const navigate = useNavigate();
 
   const loginUser = async (data) => {
-    return axios.post(`${url}/login/user`, { data });
+    return LMNoAuth.post(`/login/user`, { data });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setClicked(true);
     // You can handle the login logic here
+    openModal();
 
     const finalData = {
       usernameOrEmail: formValues.username,
@@ -29,10 +31,15 @@ const Login = () => {
     };
     try {
       const response = await loginUser(finalData);
-      setLoggedInUser(response.data);
+      setLoggedInUser(response.data.user);
+      const { accessToken, refreshToken } = response.data.token;
+      saveTokensToStorage(accessToken, refreshToken); // Save the tokens to storage
+      setLoggedInUser(response.data.user);
       navigate("/");
     } catch (error) {
       console.log(error.response.data);
+    } finally {
+      closeModal();
     }
   };
 

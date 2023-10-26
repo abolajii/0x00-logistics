@@ -1,12 +1,10 @@
 import { Button, Container, Small } from "../../components";
 
+import { LMAuth } from "../../service/api.service";
 import React from "react";
 import Table from "./table";
-import axios from "axios";
 import { useClient } from "./hook/useClient";
 import { useNavigate } from "react-router-dom";
-
-const url = "http://localhost:6600";
 
 const Clients = () => {
   const { setClients, clients } = useClient();
@@ -14,7 +12,7 @@ const Clients = () => {
   const navigate = useNavigate();
 
   const getAllClients = async () => {
-    return await axios.get(`${url}/clients`);
+    return await LMAuth.get(`/clients`);
   };
 
   React.useEffect(() => {

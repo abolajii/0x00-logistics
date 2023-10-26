@@ -2,6 +2,7 @@
 import { Box, ExpenseContainer, ExpenseForm, ValueBox } from "./styles";
 import { Button, Container, CustomCheckbox, Small } from "../../components";
 
+import { LMAuth } from "../../service/api.service";
 import { MdDelete } from "react-icons/md";
 import QuickClick from "./quick.click";
 import RadioButton from "./radiobutton";
@@ -11,8 +12,6 @@ import { formatBalance } from "../../helper";
 import { useExpense } from "./hook/useExpense";
 import useModalStore from "../../components/loading/hook/useModalStore";
 import { useNavigate } from "react-router-dom";
-
-const url = "http://localhost:6600";
 
 const CreateExpense = () => {
   const {
@@ -43,7 +42,7 @@ const CreateExpense = () => {
   };
 
   const createExpense = async (data) => {
-    return axios.post(`${url}/create/expense`, { data });
+    return LMAuth.post(`/create/expense`, { data });
   };
 
   const submitExpense = async (openModal) => {

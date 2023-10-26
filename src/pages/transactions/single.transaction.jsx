@@ -1,9 +1,9 @@
 import { Container, Small } from "../../components";
 import { formatBalance, shortDate } from "../../helper";
 
+import { LMAuth } from "../../service/api.service";
 import React from "react";
 import TransactionDetails from "./transaction.details";
-import axios from "axios";
 import { colors } from "../../constants";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
@@ -107,14 +107,13 @@ const TotalBalance = styled.div`
     letter-spacing: -0.32px;
   }
 `;
-const url = "http://localhost:6600";
 
 const SingleTransaction = () => {
   const { setTransaction, transaction } = useTransaction();
   const { id } = useParams();
 
   const getAllTransaction = async (id) => {
-    return await axios.get(`${url}/transaction/${id}`);
+    return await LMAuth.get(`/transaction/${id}`);
   };
 
   React.useEffect(() => {

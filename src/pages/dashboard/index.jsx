@@ -2,18 +2,20 @@ import { Container, Small } from "../../components";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { Grid, GridContainer, Inner } from "./styles";
 
+import { LMAuth } from "../../service/api.service";
 import React from "react";
-import axios from "axios";
 import { formatBalance } from "../../helper";
+import { useLogin } from "../login/hook/useLogin";
 
 const Dashboard = () => {
   const [showBalance, setShowBalance] = React.useState(false);
   const [profit, setProfit] = React.useState(0);
 
-  const url = "http://localhost:6600";
+  const { loggedInUser } = useLogin();
 
   const getDashboard = async () => {
-    return await axios.get(`${url}/dashboard`);
+    console.log("run");
+    return await LMAuth.get(`/dashboard`);
   };
 
   React.useEffect(() => {
@@ -41,7 +43,9 @@ const Dashboard = () => {
           <Grid>
             <div className="top">
               <div className="flex ai-center">
-                <p className="">A-Quads Errands balance</p>
+                <p className="">
+                  {loggedInUser.businessName || "N / A"} balance
+                </p>
                 <div
                   className="center cursor icon"
                   onClick={toggleBalanceVisibility}

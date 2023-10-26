@@ -1,17 +1,15 @@
 import { Container, Small } from "../../components";
 
+import { LMAuth } from "../../service/api.service";
 import React from "react";
 import Table from "./table";
-import axios from "axios";
 import { useTransaction } from "./hook/useTransaction";
-
-const url = "http://localhost:6600";
 
 const Transactions = () => {
   const { setTransactions, transactions } = useTransaction();
 
   const getAllTransactions = async () => {
-    return await axios.get(`${url}/transactions`);
+    return await LMAuth.get(`/transactions`);
   };
 
   React.useEffect(() => {

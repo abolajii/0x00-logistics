@@ -1,13 +1,11 @@
 import { ClientDetails, ClientForm, ValueBox } from "./styles";
 
 import { Container } from "../../components";
+import { LMAuth } from "../../service/api.service";
 import { Small } from "../../components";
-import axios from "axios";
 import { useClient } from "./hook/useClient";
 import useModalStore from "../../components/loading/hook/useModalStore";
 import { useNavigate } from "react-router-dom";
-
-const url = "http://localhost:6600";
 
 const CreateClient = () => {
   const { formValues, setFormValue, clicked, setClicked } = useClient();
@@ -32,7 +30,7 @@ const CreateClient = () => {
   };
 
   const createClient = async (data) => {
-    return axios.post(`${url}/create/client`, { data });
+    return LMAuth.post(`/create/client`, { data });
   };
 
   const submitClient = async () => {

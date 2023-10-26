@@ -7,15 +7,13 @@ import {
 } from "../../components";
 import { formatBalance, shortDate } from "../../helper";
 
+import { LMAuth } from "../../service/api.service";
 import React from "react";
-import axios from "axios";
 import { colors } from "../../constants";
 import styled from "styled-components";
 import { useJobStore } from "./hook/useJob";
 import useModalStore from "../../components/loading/hook/useModalStore";
 import { useParams } from "react-router-dom";
-
-const url = "http://localhost:6600";
 
 const Width = styled.div`
   width: 600px;
@@ -163,7 +161,7 @@ const SingleJob = () => {
   };
 
   const getJob = async (id) => {
-    return await axios.get(`${url}/job/${id}`);
+    return await LMAuth.get(`/job/${id}`);
   };
 
   React.useEffect(() => {
@@ -182,7 +180,7 @@ const SingleJob = () => {
   }, [setJob, id]);
 
   const updateJob = async (data) => {
-    return await axios.put(`${url}/job/${id}`, { data });
+    return await LMAuth.put(`/job/${id}`, { data });
   };
 
   const handleUpdateJob = async () => {
