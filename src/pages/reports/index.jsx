@@ -1,9 +1,11 @@
-// import React from "react";
-
-import { Container } from "../../components";
+import { Container, Small } from "../../components";
 
 const Reports = () => {
-  return <Container title="Reports">Reports</Container>;
+  return (
+    <Container title="Reports">
+      <Small title="Reports" />
+    </Container>
+  );
 };
 
 export default Reports;

@@ -2,27 +2,42 @@ import { Error, FormBox, FormContainer, Input, LinkText } from "./styles";
 
 import { Button } from "../../components";
 import { LMNoAuth } from "../../service/api.service";
+import { saveTokensToStorage } from "../../helper";
+import useAlertStore from "../../hook/useAlertStore";
+import { useLogin } from "../login/hook/useLogin";
+import useModalStore from "../../components/loading/hook/useModalStore";
 import { useNavigate } from "react-router-dom";
 import { useRegister } from "./hook/useRegister";
 
 const Registration = () => {
   const { formValues, setFormValue, clicked, setClicked } = useRegister();
 
+  const { openModal, closeModal } = useModalStore();
   const navigate = useNavigate();
+  const { setSuccess } = useAlertStore();
+  const { setLoggedInUser } = useLogin();
 
   const createUser = async (data) => {
     return LMNoAuth.post(`/create/user`, { data });
   };
 
   const handleSubmit = async (e) => {
+    openModal();
     e.preventDefault();
     setClicked(true);
     // You can handle the registration logic here
     try {
-      await createUser(formValues);
+      const response = await createUser(formValues);
       navigate("/");
+      setLoggedInUser(response.data.user);
+      const { accessToken, refreshToken } = response.data.token;
+      saveTokensToStorage(accessToken, refreshToken); // Save the tokens to storage
+      setLoggedInUser(response.data.user);
+      setSuccess(`Welcome, ${response.data.user.username}`);
     } catch (error) {
       console.log(error.response.data);
+    } finally {
+      closeModal();
     }
   };
 
@@ -52,7 +67,7 @@ const Registration = () => {
             <div className="label">Email:</div>
             <Input
               type="email"
-              placeholder="email"
+              placeholder="Email"
               value={formValues.email}
               onChange={(e) => setFormValue("email", e.target.value)}
               required

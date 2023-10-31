@@ -11,6 +11,7 @@ const Tag = styled.span`
   font-size: 12px;
   font-weight: 600;
   line-height: normal;
+  width: 90px;
 `;
 
 const Pending = styled(Tag)`
@@ -53,7 +54,7 @@ const CustomTag = ({ tag }) => {
     case "pending":
       return <Pending>Pending Job</Pending>;
     case "done":
-      return <Done>Job Done</Done>;
+      return <Done>Done Job</Done>;
     case "not-paid":
       return <NotPaid>Not Paid</NotPaid>;
     case "paid":

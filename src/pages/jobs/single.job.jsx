@@ -3,6 +3,8 @@ import {
   Container,
   CustomCheckbox,
   CustomTag,
+  NavHeader,
+  Skeleton,
   Small,
 } from "../../components";
 import { formatBalance, shortDate } from "../../helper";
@@ -53,7 +55,7 @@ const TotalBalance = styled.div`
   gap: 10px;
   /* flex: 1 0 0; */
   margin-left: 20px;
-  width: 90%;
+  width: 100%;
 
   border-radius: 12px;
   background: ${colors.bgSecondary};
@@ -143,7 +145,7 @@ const GridTwoContainer = styled.div`
 `;
 
 const SingleJob = () => {
-  const { setJob, job } = useJobStore();
+  const { setJob, job, setLoading, loading } = useJobStore();
   const { id } = useParams();
 
   const [paymentStatus, setPaymentStatus] = React.useState("");
@@ -165,19 +167,24 @@ const SingleJob = () => {
   };
 
   React.useEffect(() => {
+    setLoading(true);
+  }, [setLoading]);
+
+  React.useEffect(() => {
     const allJobs = async () => {
       try {
         const response = await getJob(id);
         setJob(response.data);
         setPaymentStatus(response.data.paymentStatus);
         setJobStatus(response.data.jobStatus);
+        setLoading(false);
       } catch (error) {
         console.log(error);
       }
     };
 
     allJobs();
-  }, [setJob, id]);
+  }, [setJob, id, setLoading]);
 
   const updateJob = async (data) => {
     return await LMAuth.put(`/job/${id}`, { data });
@@ -199,7 +206,6 @@ const SingleJob = () => {
 
       try {
         const response = await updateJob(data);
-        console.log(response.data);
         setJob(response.data);
       } catch (error) {
         console.log(error);
@@ -209,9 +215,82 @@ const SingleJob = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <Container title="View Job">
+        <Small title="Job Details" />
+        <NavHeader titleOne="Jobs" path="/jobs" titleTwo="Job Details" />
+
+        <Width>
+          <div className="flex">
+            <div>
+              <GridContainer>
+                <GridItem>
+                  <p className="title">Date</p>
+                  <Skeleton height="33px" width="90%" border={4} />
+                </GridItem>
+                <GridItem>
+                  <p className="title">Job Status</p>
+                  <Skeleton height="33px" width="90%" border={4} />
+                </GridItem>
+                <GridItem>
+                  <p className="title">Payment Status</p>
+                  <Skeleton height="33px" width="90%" border={4} />
+                </GridItem>
+              </GridContainer>
+            </div>
+            <div className="flex-1">
+              <div className="w-100">
+                <Skeleton height="110px" width="400px" ml="40px" border={6} />
+              </div>
+            </div>
+          </div>
+          <Bottom>
+            <GridTwoContainer>
+              <div className="item">
+                <div className="bottom-title">Customer Name</div>
+                <Skeleton height="50px" width="90%" border={7} mt="10px" />
+              </div>
+              <div className="item">
+                <div className="bottom-title">Payer</div>
+                <Skeleton height="50px" width="90%" border={7} mt="10px" />
+              </div>
+              <div className="item">
+                <div className="bottom-title">Pick up</div>
+                <Skeleton height="50px" width="90%" border={7} mt="10px" />
+              </div>
+              <div className="item">
+                <div className="bottom-title">Delivery</div>
+                <Skeleton height="50px" width="90%" border={7} mt="10px" />
+              </div>
+            </GridTwoContainer>
+            <div>
+              <div className="status">Update status</div>
+              <div className="status-title">Job Status</div>
+              <div>
+                <CustomCheckbox label="Done" value="done" />
+                <CustomCheckbox label="Pending" value="pending" />
+                <CustomCheckbox label="Canceled" value="canceled" />
+                <CustomCheckbox label="Next day" value="next-day" />
+              </div>
+
+              <div className="status-title">Payment Status</div>
+              <div>
+                <CustomCheckbox label="Paid" value="paid" />
+                <CustomCheckbox label="Not Paid" value="not-paid" />
+                <CustomCheckbox label="Void" value="void" />
+              </div>
+            </div>
+          </Bottom>
+        </Width>
+      </Container>
+    );
+  }
+
   return (
     <Container title="View Job">
       <Small title="Job Details" />
+      <NavHeader titleOne="Jobs" path="/jobs" titleTwo="Job Details" />
       <Width>
         <div className="flex">
           <div>
@@ -278,12 +357,7 @@ const SingleJob = () => {
                 checkedValue={jobStatus}
                 onChange={handleJobStatusChange}
               />
-              <CustomCheckbox
-                label="Void"
-                value="void"
-                checkedValue={jobStatus}
-                onChange={handleJobStatusChange}
-              />
+
               <CustomCheckbox
                 label="Canceled"
                 value="canceled"
@@ -312,6 +386,12 @@ const SingleJob = () => {
               <CustomCheckbox
                 label="Not Paid"
                 value="not-paid"
+                checkedValue={paymentStatus}
+                onChange={handlePaymentStatusChange}
+              />
+              <CustomCheckbox
+                label="Void"
+                value="void"
                 checkedValue={paymentStatus}
                 onChange={handlePaymentStatusChange}
               />

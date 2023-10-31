@@ -1,4 +1,4 @@
-import { Container, Small } from "../../components";
+import { Container, NavHeader, Skeleton, Small } from "../../components";
 import { formatBalance, shortDate } from "../../helper";
 
 import { LMAuth } from "../../service/api.service";
@@ -109,25 +109,30 @@ const TotalBalance = styled.div`
 `;
 
 const SingleTransaction = () => {
-  const { setTransaction, transaction } = useTransaction();
+  const { setTransaction, transaction, loading, setLoading } = useTransaction();
   const { id } = useParams();
+
+  React.useEffect(() => {
+    setLoading(true);
+  }, [setLoading]);
 
   const getAllTransaction = async (id) => {
     return await LMAuth.get(`/transaction/${id}`);
   };
 
   React.useEffect(() => {
-    const allJobs = async () => {
+    const allTransactions = async () => {
       try {
         const response = await getAllTransaction(id);
         setTransaction(response.data);
+        setLoading(false);
       } catch (error) {
         console.log(error);
       }
     };
 
-    allJobs();
-  }, [setTransaction, id]);
+    allTransactions();
+  }, [setTransaction, id, setLoading]);
 
   // Calculate total paid jobs and unpaid jobs
   const totalPaidJobs = transaction.jobs.filter(
@@ -149,9 +154,74 @@ const SingleTransaction = () => {
     0
   );
 
+  if (loading) {
+    return (
+      <Container title="View Transaction">
+        <Small title="View Transaction" />
+        <NavHeader
+          titleOne="Transactions"
+          path="/transactions"
+          titleTwo="Transaction Details"
+        />
+
+        <Inner>
+          <div className="flex">
+            <div>
+              <GridContainer>
+                <GridItem>
+                  <p className="title">Date</p>
+                  <Skeleton height="33px" width="90%" border={4} />
+                </GridItem>
+                <GridItem>
+                  <p className="title">No of Jobs</p>
+                  <Skeleton height="33px" width="90%" border={4} />
+                </GridItem>
+                <GridItem>
+                  <p className="title">Transaction ID</p>
+                  <Skeleton height="33px" width="90%" border={4} />
+                </GridItem>
+                <GridItem>
+                  <p className="title">Payment Status</p>
+                  <Skeleton height="33px" width="90%" border={4} />
+                </GridItem>
+              </GridContainer>
+            </div>
+            <div className="flex-1">
+              <Skeleton height="110px" width="90%" ml="40px" border={6} />
+            </div>
+          </div>
+
+          <Bottom>
+            <>
+              <Skeleton height="27px" width="118px" border={6} mb="6px" />
+              <TransactionDetails
+                jobDetails={totalPaidJobs}
+                total={totalAmountPaidJobs}
+              />
+            </>
+
+            <>
+              <Skeleton height="27px" width="118px" border={6} mb="6px" />
+
+              <TransactionDetails
+                jobDetails={totalUnpaidJobs}
+                total={totalAmountUnpaidJobs}
+              />
+            </>
+          </Bottom>
+        </Inner>
+      </Container>
+    );
+  }
+
   return (
     <Container title="View Transaction">
       <Small title="View Transaction" />
+      <NavHeader
+        titleOne="Transactions"
+        path="/transactions"
+        titleTwo="Transaction Details"
+      />
       <Inner>
         <div className="flex">
           <div>

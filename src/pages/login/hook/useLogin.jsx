@@ -8,6 +8,8 @@ const initialUser = getUserFromStorage() || {
 };
 
 const useLogin = create((set) => ({
+  totalAmount: 0,
+  setTotalAmount: (totalAmount) => set({ totalAmount }),
   formValues: {
     username: "aqquad",
     // email: "beejhaiiy@gmail.com",

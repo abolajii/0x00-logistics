@@ -4,3 +4,7 @@ export { default as Button } from "./button";
 export { default as CustomCheckbox } from "./checkbox";
 export { default as Loading } from "./loading";
 export { default as CustomTag } from "./tag";
+export { default as Skeleton } from "./skeleton";
+export { default as Alert } from "./alert";
+export { default as Modal } from "./modal";
+export { default as NavHeader } from "./navheader";

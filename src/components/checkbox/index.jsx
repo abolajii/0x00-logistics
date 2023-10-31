@@ -56,6 +56,7 @@ const CustomCheckbox = ({ label, value, checkedValue, onChange }) => {
     delivery: "#e21122",
     single: "#007bff",
     multiple: "#4CAF50",
+    file: "#ccc",
     // Add more background colors for other labels here
   };
   const isChecked = value === checkedValue;

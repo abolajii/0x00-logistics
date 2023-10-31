@@ -3,22 +3,6 @@ import styled from "styled-components";
 // import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const Btn = styled.button`
-  display: inline-flex;
-  padding: 9px;
-  justify-content: center;
-  align-items: center;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  line-height: normal;
-`;
-
-const NotPaid = styled(Btn)`
-  color: #e53b3b;
-  background: #ffeaea;
-`;
-
 const Text = styled.div`
   display: flex;
   padding: 6px 11px;
@@ -30,6 +14,11 @@ const Text = styled.div`
   font-weight: 600;
   line-height: normal;
   flex: 1;
+`;
+
+const NotPaid = styled(Text)`
+  color: #e53b3b;
+  background: #ffeaea;
 `;
 
 const Pending = styled(Text)`

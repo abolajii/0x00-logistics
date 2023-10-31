@@ -1,6 +1,6 @@
 import { ClientDetails, ClientForm, ValueBox } from "./styles";
+import { Container, NavHeader } from "../../components";
 
-import { Container } from "../../components";
 import { LMAuth } from "../../service/api.service";
 import { Small } from "../../components";
 import { useClient } from "./hook/useClient";
@@ -47,6 +47,7 @@ const CreateClient = () => {
   return (
     <Container title="Clients">
       <Small title="New Client" />
+      <NavHeader titleOne="Clients" path="/clients" titleTwo="Create Client" />
       <div className="flex">
         <div className="flex-1">
           <ClientForm>

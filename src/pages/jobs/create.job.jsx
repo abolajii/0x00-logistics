@@ -4,6 +4,7 @@ import { Button, Container, CustomCheckbox, Small } from "../../components";
 
 import { BiSolidUpArrow } from "react-icons/bi";
 import Dropdown from "./components/dropdown";
+import FileUploadComponent from "./file.upload";
 import JobDetails from "./job.details";
 import { LMAuth } from "../../service/api.service";
 import React from "react";
@@ -34,6 +35,8 @@ const CreateJob = () => {
   const [maxLocationsReached, setMaxLocationsReached] = React.useState(false);
 
   const [jobType, setJobType] = React.useState("single"); // State to track multiple expense mode
+
+  const [file, setFile] = React.useState(null);
 
   const { openModal, closeModal } = useModalStore();
   const navigate = useNavigate();
@@ -69,10 +72,6 @@ const CreateJob = () => {
       }
       setClicked(false);
     } else {
-      // console.log(formValues);
-      // console.log(formValues);
-      // setClicked(true)
-      // formValues.delivery = deliveryLocations[0].delivery;
       if (
         !formValues.customerName ||
         !formValues.pickUp ||
@@ -88,46 +87,6 @@ const CreateJob = () => {
   const handlePrev = () => {
     setStep(1);
   };
-
-  // const handleSubmit = (e, step) => {
-  //   //
-  //   e.preventDefault();
-
-  //   if (!multipleJobs) {
-  //     if (step === 1) {
-  //       formValues.delivery = deliveryLocations[0].delivery;
-  //       setClicked(true);
-  //       if (
-  //         !formValues.customerName ||
-  //         !formValues.pickUp ||
-  //         !formValues.delivery
-  //       ) {
-  //         return;
-  //       } else {
-  //         formValues.amount = deliveryLocations[0].amount;
-
-  //         setStep(2);
-  //         setClicked(false);
-  //       }
-  //     } else {
-  //       setStep(1);
-  //       setClicked(false);
-  //     }
-  //   } else {
-  //     if (step === 1) {
-  //       setClicked(true);
-  //       if (!formValues.customerName || !formValues.pickUp) {
-  //         return;
-  //       } else {
-  //         setStep(2);
-  //         setClicked(false);
-  //       }
-  //     } else {
-  //       setStep(1);
-  //       setClicked(false);
-  //     }
-  //   }
-  // };
 
   const createJob = async (data) => {
     return LMAuth.post(`/create/job`, { data });
@@ -180,6 +139,31 @@ const CreateJob = () => {
     } finally {
       closeModal();
     }
+  };
+
+  const handleUpload = async () => {
+    // Create a FormData object
+    const formData = new FormData();
+    setClicked(true);
+    if (!formValues.customerName || !formValues.pickUp || !file) return;
+
+    openModal();
+
+    try {
+      // Append customer name and pick-up location
+      formData.append("customerName", formValues.customerName);
+      formData.append("pickUp", formValues.pickUp);
+      formData.append("file", file);
+
+      await LMAuth.post("/upload", formData);
+      navigate("/jobs");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      closeModal();
+    }
+
+    closeModal();
   };
 
   const handleIconClick = () => {
@@ -287,6 +271,12 @@ const CreateJob = () => {
                       checkedValue={jobType}
                       onChange={(val) => handleJobTypeChange(val)}
                     />
+                    <CustomCheckbox
+                      value="file"
+                      label="File upload"
+                      checkedValue={jobType}
+                      onChange={(val) => handleJobTypeChange(val)}
+                    />
                   </div>
                 </div>
 
@@ -359,7 +349,7 @@ const CreateJob = () => {
                       )}
                     </div>
                   </div>
-                ) : (
+                ) : jobType === "single" ? (
                   <div className="field">
                     <label>Delivery Location:</label>
                     <input
@@ -377,6 +367,14 @@ const CreateJob = () => {
                       <div className="error">This field is required</div>
                     )}
                   </div>
+                ) : null}
+
+                {jobType === "file" && (
+                  <FileUploadComponent
+                    file={file}
+                    setFile={setFile}
+                    noFile={clicked && !file}
+                  />
                 )}
               </>
             )}
@@ -465,7 +463,11 @@ const CreateJob = () => {
               </>
             )}
             <div className="flex justify-between btn-container">
-              {step === 1 ? (
+              {jobType === "file" ? (
+                <div>
+                  <Button onClick={handleUpload} title="Create" />
+                </div>
+              ) : step === 1 ? (
                 <div>
                   <Button onClick={handleNext} title="Next" />
                 </div>
@@ -484,7 +486,9 @@ const CreateJob = () => {
         {/*  */}
 
         <div className="flex-1">
-          <JobDetails multipleJobs={jobType === "multiple"} />
+          {jobType !== "file" && (
+            <JobDetails multipleJobs={jobType === "multiple"} />
+          )}
         </div>
       </div>
     </Container>

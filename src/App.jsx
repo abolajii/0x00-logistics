@@ -1,5 +1,6 @@
 // import React from "react";
 
+import { Alert, Loading } from "./components";
 import {
   Clients,
   CreateClient,
@@ -19,14 +20,14 @@ import {
 } from "./pages";
 import { Route, Routes } from "react-router-dom";
 
-import { Loading } from "./components";
-
 const App = () => {
   return (
     <>
       <Loading />
+      <Alert />
       <Routes>
         <Route element={<Dashboard />} path="/" />
+        <Route element={<Dashboard />} path="/dashboard" />
         <Route element={<Login />} path="/login" />
         <Route element={<Register />} path="/register" />
         <Route element={<Jobs />} path="/jobs" />

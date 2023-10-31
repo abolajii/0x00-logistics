@@ -1,4 +1,4 @@
-import { Button, Container, Small } from "../../components";
+import { Button, Container, NavHeader, Small } from "../../components";
 
 import { LMAuth } from "../../service/api.service";
 import React from "react";
@@ -33,7 +33,10 @@ const Jobs = () => {
   return (
     <Container title="Jobs">
       <div className="flex ai-center justify-between">
-        <Small title={`Jobs (${length})`} />
+        <div>
+          <Small title={`Jobs (${length})`} />
+          <NavHeader titleOne="Jobs" path="/jobs" />
+        </div>
         <Button title="Create" onClick={() => navigate("/job/create")} />
       </div>
       <Table />

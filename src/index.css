@@ -37,7 +37,6 @@ ul {
 input {
   outline: none;
   border: none;
-  text-transform: capitalize;
 }
 
 /* button:hover {

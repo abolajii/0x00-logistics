@@ -1,7 +1,16 @@
+import {
+  SkeletonCell,
+  SkeletonHeaderCell,
+  SkeletonRow,
+  SkeletonTableWrapper,
+} from "../../components/skeleton/styles";
+
+import { Skeleton } from "../../components";
 /* eslint-disable react/prop-types */
 import { colors } from "../../constants";
 import { formatBalance } from "../../helper";
 import styled from "styled-components";
+import { useTransaction } from "./hook/useTransaction";
 
 const Container = styled.div`
   margin-bottom: 20px;
@@ -53,6 +62,8 @@ const HeaderColumn = styled(Column)`
 `;
 
 const TransactionDetails = ({ jobDetails, total }) => {
+  const { loading } = useTransaction();
+
   const columns = [
     { id: 1, title: "Customer", key: "customerName" },
     { id: 2, title: "Pick up", key: "pickUp" },
@@ -60,6 +71,53 @@ const TransactionDetails = ({ jobDetails, total }) => {
     { id: 4, title: "Amount", key: "amount" },
     { id: 5, title: "Payer", key: "payer" },
   ];
+
+  if (loading) {
+    return (
+      <Container>
+        <SkeletonTableWrapper>
+          <SkeletonRow>
+            {[...Array(5)].map((_, index) => {
+              return (
+                <SkeletonHeaderCell key={index}>
+                  <Skeleton width="100px" height="24px" border={5} />
+                </SkeletonHeaderCell>
+              );
+            })}
+          </SkeletonRow>
+        </SkeletonTableWrapper>
+
+        {[...Array(5)].map((_, index) => {
+          return (
+            <SkeletonRow key={index}>
+              <SkeletonCell>
+                <Skeleton width="120px" height="20px" border={3} />
+              </SkeletonCell>
+              <SkeletonCell>
+                <Skeleton width="120px" height="20px" border={3} />
+              </SkeletonCell>
+              <SkeletonCell>
+                <Skeleton width="120px" height="20px" border={3} />
+              </SkeletonCell>
+              <SkeletonCell>
+                <Skeleton width="120px" height="20px" border={3} />
+              </SkeletonCell>
+              <SkeletonCell>
+                <Skeleton width="120px" height="20px" border={3} />
+              </SkeletonCell>
+            </SkeletonRow>
+          );
+        })}
+
+        <div className="flex ai-center balance">
+          <div className="title">Total:</div>
+          <div className="value">
+            <Skeleton width="120px" height="30px" border={3} />
+          </div>
+        </div>
+      </Container>
+    );
+  }
 
   return (
     <Container>

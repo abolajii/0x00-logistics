@@ -3,6 +3,7 @@ import { Error, FormBox, FormContainer, Input, LinkText } from "./styles";
 import { Button } from "../../components";
 import { LMNoAuth } from "../../service/api.service";
 import { saveTokensToStorage } from "../../helper";
+import useAlertStore from "../../hook/useAlertStore";
 // import React from "react";
 import { useLogin } from "./hook/useLogin";
 import useModalStore from "../../components/loading/hook/useModalStore";
@@ -12,6 +13,8 @@ const Login = () => {
   const { formValues, setFormValue, clicked, setClicked, setLoggedInUser } =
     useLogin();
   const { openModal, closeModal } = useModalStore();
+
+  const { setError } = useAlertStore();
 
   const navigate = useNavigate();
 
@@ -37,7 +40,8 @@ const Login = () => {
       setLoggedInUser(response.data.user);
       navigate("/");
     } catch (error) {
-      console.log(error.response.data);
+      console.log(error.response.data.error);
+      setError(error.response.data.error);
     } finally {
       closeModal();
     }

@@ -2,10 +2,10 @@ import { create } from "zustand";
 
 const useRegister = create((set) => ({
   formValues: {
-    username: "aqquad",
-    email: "beejhaiiy@gmail.com",
-    password: "Admin12345!",
-    businessName: "A-Quad Errands",
+    username: "",
+    email: "",
+    password: "",
+    businessName: "",
     // businessType: "",
   },
   setFormValue: (fieldName, value) =>

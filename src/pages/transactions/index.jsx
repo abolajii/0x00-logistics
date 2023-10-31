@@ -1,4 +1,4 @@
-import { Container, Small } from "../../components";
+import { Container, NavHeader, Small } from "../../components";
 
 import { LMAuth } from "../../service/api.service";
 import React from "react";
@@ -32,6 +32,7 @@ const Transactions = () => {
   return (
     <Container title="Transactions">
       <Small title={`Transactions (${length})`} />
+      <NavHeader titleOne="Transactions" path="/transactions" />
       <Table />
     </Container>
   );

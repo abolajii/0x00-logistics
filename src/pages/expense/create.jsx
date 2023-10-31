@@ -1,6 +1,12 @@
 /* eslint-disable no-unused-vars */
 import { Box, ExpenseContainer, ExpenseForm, ValueBox } from "./styles";
-import { Button, Container, CustomCheckbox, Small } from "../../components";
+import {
+  Button,
+  Container,
+  CustomCheckbox,
+  NavHeader,
+  Small,
+} from "../../components";
 
 import { LMAuth } from "../../service/api.service";
 import { MdDelete } from "react-icons/md";
@@ -86,6 +92,11 @@ const CreateExpense = () => {
   return (
     <Container title="Expense">
       <Small title="New Expense" />
+      <NavHeader
+        titleOne="Expenses"
+        path="/expense"
+        titleTwo="Create expense"
+      />
 
       <div className="flex">
         <div className="flex-1">
