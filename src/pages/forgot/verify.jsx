@@ -62,9 +62,8 @@ const Error = styled.div`
   font-size: 12px;
 `;
 
-const Verify = ({ setSteps }) => {
+const Verify = ({ setSteps, email, setEmail }) => {
   //
-  const [email, setEmail] = React.useState("");
   const [clicked, setClicked] = React.useState(false);
 
   const { openModal, closeModal } = useModalStore();
@@ -102,7 +101,6 @@ const Verify = ({ setSteps }) => {
           to verify your account.
         </p>
         <div className="label">Email address</div>
-
         <Input
           style={{
             borderColor: clicked && !email ? "red" : "#ccc",
