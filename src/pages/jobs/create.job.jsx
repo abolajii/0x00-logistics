@@ -1,6 +1,12 @@
 /* eslint-disable no-unused-vars */
 import { Box, Form } from "./styles";
-import { Button, Container, CustomCheckbox, Small } from "../../components";
+import {
+  Button,
+  Container,
+  CustomCheckbox,
+  NavHeader,
+  Small,
+} from "../../components";
 
 import { BiSolidUpArrow } from "react-icons/bi";
 import Dropdown from "./components/dropdown";
@@ -9,6 +15,7 @@ import JobDetails from "./job.details";
 import { LMAuth } from "../../service/api.service";
 import React from "react";
 import { clsx } from "clsx";
+import useAlertStore from "../../hook/useAlertStore";
 import { useClient } from "../clients/hook/useClient";
 import { useJobStore } from "./hook/useJob";
 import useModalStore from "../../components/loading/hook/useModalStore";
@@ -30,6 +37,10 @@ const CreateJob = () => {
     setDeliveryLocations,
   } = useJobStore();
 
+  React.useEffect(() => {
+    setClicked(false);
+  }, [setClicked]);
+
   const [isRotated, setIsRotated] = React.useState(false);
 
   const [maxLocationsReached, setMaxLocationsReached] = React.useState(false);
@@ -40,6 +51,8 @@ const CreateJob = () => {
 
   const { openModal, closeModal } = useModalStore();
   const navigate = useNavigate();
+
+  const { setError } = useAlertStore();
 
   const { setClients, clients } = useClient();
 
@@ -133,6 +146,15 @@ const CreateJob = () => {
 
     try {
       await createJob(finalData);
+      handlePrev();
+      setClicked(false);
+      setFormValue("customerName", "");
+      setFormValue("pickUp", "");
+      setFormValue("delivery", "");
+      setFormValue("amount", "");
+      setFormValue("payer", "");
+
+      setDeliveryLocations([{ amount: 0, delivery: "" }]);
       navigate("/jobs");
     } catch (error) {
       console.log(error);
@@ -142,6 +164,7 @@ const CreateJob = () => {
   };
 
   const handleUpload = async () => {
+    const acceptedFiles = ["xlsx"];
     // Create a FormData object
     const formData = new FormData();
     setClicked(true);
@@ -156,14 +179,16 @@ const CreateJob = () => {
       formData.append("file", file);
 
       await LMAuth.post("/upload", formData);
+      handlePrev();
       navigate("/jobs");
+      setFormValue("customerName", "");
+      setFormValue("pickUp", "");
+      setClicked(false);
     } catch (error) {
-      console.log(error);
+      setError(error.response.data.error);
     } finally {
       closeModal();
     }
-
-    closeModal();
   };
 
   const handleIconClick = () => {
@@ -197,6 +222,8 @@ const CreateJob = () => {
   return (
     <Container title="Job">
       <Small title="New Job" />
+      <NavHeader titleOne="Jobs" path="/jobs" titleTwo={"New Job"} />
+
       <div className="flex justify-between gap-3">
         {/*  */}
         <Box className="flex-1">
@@ -486,9 +513,10 @@ const CreateJob = () => {
         {/*  */}
 
         <div className="flex-1">
-          {jobType !== "file" && (
-            <JobDetails multipleJobs={jobType === "multiple"} />
-          )}
+          <JobDetails
+            multipleJobs={jobType === "multiple"}
+            file={jobType === "file"}
+          />
         </div>
       </div>
     </Container>

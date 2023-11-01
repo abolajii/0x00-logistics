@@ -2,10 +2,15 @@
 
 import { Inner, Logo, SidebarMenu, SidebarMenuTwo } from "./styles";
 
+import { LMAuth } from "../../service/api.service";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
+import { removeTokens } from "../../helper";
+import { useLogin } from "../../pages/login/hook/useLogin";
 
 const Sidebar = () => {
+  const { setLoggedInUser } = useLogin();
+  //
   const routes = [
     {
       path: "/",
@@ -27,16 +32,29 @@ const Sidebar = () => {
       path: "/transactions",
       name: "Transactions",
     },
-    {
-      path: "/reports",
-      name: "Reports",
-    },
+    // {
+    //   path: "/reports",
+    //   name: "Reports",
+    // },
 
     {
       path: "/settings",
       name: "Settings",
     },
   ];
+
+  const logout = async () => {
+    const refreshToken = await localStorage.getItem("refreshToken");
+    try {
+      await LMAuth.post("/logout", { refreshToken });
+      removeTokens();
+      setLoggedInUser({
+        username: "",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Inner>
@@ -48,7 +66,7 @@ const Sidebar = () => {
       <SidebarMenu>
         <p>Menu</p>
         <ul>
-          {routes.slice(0, 6).map((route, index) => (
+          {routes.slice(0, 5).map((route, index) => (
             <li key={index}>
               <Link to={route.path}>{route.name}</Link>
             </li>
@@ -58,13 +76,13 @@ const Sidebar = () => {
       <SidebarMenuTwo>
         <p>Profile</p>
         <ul>
-          {routes.slice(6).map((route, index) => (
+          {routes.slice(5).map((route, index) => (
             <li key={index}>
               <Link to={route.path}>{route.name}</Link>
             </li>
           ))}
           <li>
-            <Link to="/login">Logout</Link>
+            <button onClick={logout}>Logout</button>
           </li>
         </ul>
       </SidebarMenuTwo>

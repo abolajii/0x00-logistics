@@ -66,9 +66,11 @@ const FileUploadComponent = ({ file, setFile, noFile }) => {
           setError(""); // Clear any previous error message
         } else {
           setError("Only .xlsx files are allowed.");
+          setFile(null);
         }
       } else if (rejectedFiles.length > 0) {
         setError("Only .xlsx files are allowed.");
+        setFile(null);
       }
     },
     [setFile]

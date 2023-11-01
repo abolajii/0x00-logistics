@@ -5,6 +5,7 @@ import { create } from "zustand";
 const initialUser = getUserFromStorage() || {
   businessName: "",
   username: "",
+  openingBalance: 0,
 };
 
 const useLogin = create((set) => ({

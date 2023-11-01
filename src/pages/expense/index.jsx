@@ -33,7 +33,7 @@ const Expense = () => {
       <div className="flex ai-center justify-between">
         <div>
           <Small title={`Expense (${expenses.length})`} />
-          <NavHeader titleOne="Expenses" path="/expense" />
+          <NavHeader titleOne="Expense" path="/expense" />
         </div>
         <Button title="Create" onClick={() => navigate("/expense/create")} />
       </div>

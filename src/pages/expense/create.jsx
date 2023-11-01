@@ -92,11 +92,7 @@ const CreateExpense = () => {
   return (
     <Container title="Expense">
       <Small title="New Expense" />
-      <NavHeader
-        titleOne="Expenses"
-        path="/expense"
-        titleTwo="Create expense"
-      />
+      <NavHeader titleOne="Expense" path="/expense" titleTwo="Create expense" />
 
       <div className="flex">
         <div className="flex-1">

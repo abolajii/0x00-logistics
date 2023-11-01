@@ -36,7 +36,8 @@ const SidebarMenu = styled.div`
     color: #000;
   }
 
-  a {
+  a,
+  button {
     font-size: 16px;
     font-style: normal;
     font-weight: 300;

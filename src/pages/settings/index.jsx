@@ -1,14 +1,25 @@
-import { Container, Modal, Small } from "../../components";
+import { Button, Container, Modal, NavHeader, Small } from "../../components";
 
+import { LMAuth } from "../../service/api.service";
 import React from "react";
 import { colors } from "../../constants";
 import { formatBalance } from "../../helper";
 import styled from "styled-components";
+import useAlertStore from "../../hook/useAlertStore";
 import { useLogin } from "../login/hook/useLogin";
+import useModalStore from "../../components/loading/hook/useModalStore";
 
 const Inner = styled.div`
   width: 600px;
   margin-top: 30px;
+
+  .note {
+    font-size: 11px;
+    font-weight: bold;
+    color: #416b69;
+    margin-top: 2px;
+  }
+
   .width {
     width: 270px;
   }
@@ -51,6 +62,13 @@ const Inner = styled.div`
   .update {
     color: red;
   }
+
+  .btn-container {
+    margin-top: 100px;
+    padding: 16px 0;
+
+    border-top: 1px solid #eff2f5;
+  }
 `;
 
 const GridTwoContainer = styled.div`
@@ -63,15 +81,47 @@ const GridTwoContainer = styled.div`
 `;
 
 const Settings = () => {
-  const { loggedInUser, totalAmount } = useLogin();
+  const { loggedInUser, setTotalAmount, totalAmount, setLoggedInUser } =
+    useLogin();
+
+  const { closeModal, openModal } = useModalStore();
+
+  const { setSuccess } = useAlertStore();
+
+  const [show, setShow] = React.useState(false);
+
   const [openingBalance, setOpeningBalance] = React.useState(
-    loggedInUser.openingBalance
+    loggedInUser.openingBalance || 0
   );
+
+  const [businessName, setBusinessName] = React.useState(
+    loggedInUser.businessName
+  );
+
+  const getDashboard = async () => {
+    return await LMAuth.get(`/dashboard`);
+  };
+
+  React.useEffect(() => {
+    const dashboardDetails = async () => {
+      try {
+        const response = await getDashboard();
+        setTotalAmount(response.data.totalPaidJobsAmount);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    dashboardDetails();
+  }, [setTotalAmount]);
+
   const inputRef = React.useRef(null); // Create a ref for the input field
+  const inputBusinessRef = React.useRef(null); // Create a ref for the input field
   const [readOnly, setReadOnly] = React.useState(true);
+  const [readOnlyTwo, setReadOnlyTwo] = React.useState(true);
   // console.log(loggedInUser);
 
-  const [openModal, setOpenModal] = React.useState(false);
+  const [modal, setModal] = React.useState(false);
 
   React.useEffect(() => {
     // Use useEffect to focus the input field when readOnly is set to false
@@ -80,15 +130,57 @@ const Settings = () => {
     }
   }, [readOnly]);
 
+  React.useEffect(() => {
+    // Use useEffect to focus the input field when readOnly is set to false
+    if (!readOnlyTwo && inputBusinessRef.current) {
+      inputBusinessRef.current.focus();
+    }
+  }, [readOnlyTwo]);
+
   const handleInputChange = (e) => {
     const numericValue = e.target.value.replace(/[^0-9]/g, ""); // Remove non-numeric characters
     setOpeningBalance(numericValue);
   };
 
+  const updateUser = async (data) => {
+    return await LMAuth.put("/user", { data });
+  };
+
+  const handleUpdate = async () => {
+    openModal();
+    try {
+      const updatedData = {};
+
+      if (businessName !== loggedInUser.businessName) {
+        updatedData.businessName = businessName;
+      }
+
+      if (openingBalance !== loggedInUser.openingBalance) {
+        updatedData.openingBalance = openingBalance;
+      }
+
+      if (Object.keys(updatedData).length > 0) {
+        // Only send the update request if there are changes
+        const response = await updateUser(updatedData);
+        setLoggedInUser(response.data.user);
+        setSuccess("Profile updated successfully");
+      } else {
+        // No changes to update
+        setSuccess("No changes to save.");
+      }
+    } catch (error) {
+      console.log(error);
+      closeModal();
+    } finally {
+      closeModal();
+    }
+  };
+
   return (
     <Container title="Settings">
-      {openModal && <Modal />}
+      {modal && <Modal close={() => setModal(false)} />}
       <Small title="Update Profile" />
+      <NavHeader titleOne={"Settings"} />
       <Inner>
         <GridTwoContainer>
           <div className="item">
@@ -100,11 +192,20 @@ const Settings = () => {
           <div className="item">
             <div className="flex ai-center justify-between width">
               <div className="bottom-title">Business name</div>
-              <div className="bottom-title update cursor">Update</div>
+              <div
+                className="bottom-title update cursor"
+                onClick={() => setReadOnlyTwo(false)}
+              >
+                Update
+              </div>
             </div>
-            <div className="value flex ai-center">
-              {loggedInUser?.businessName}
-            </div>
+            <input
+              ref={inputBusinessRef}
+              readOnly={readOnlyTwo}
+              type="text"
+              value={businessName}
+              onChange={({ target }) => setBusinessName(target.value)}
+            />
           </div>
 
           <div className="item">
@@ -114,11 +215,17 @@ const Settings = () => {
           <div className="item">
             <div className="flex ai-center justify-between width">
               <div className="bottom-title">Total made</div>
-              <div className="bottom-title cursor update">Hide</div>
+              <div
+                className="bottom-title cursor update"
+                onClick={() => setShow(!show)}
+              >
+                {show ? "Hide" : "Show"}
+              </div>
             </div>
             <div className="value flex ai-center">
-              {formatBalance(totalAmount)}
+              {show ? formatBalance(totalAmount) : "₦*****"}
             </div>
+            <p className="note">*Balance without expense(s)</p>
           </div>
         </GridTwoContainer>
         <div>
@@ -143,6 +250,7 @@ const Settings = () => {
                 value={formatBalance(openingBalance)}
                 onChange={handleInputChange}
               />
+              <p className="note">*You can only set this once</p>
             </div>
             <div className="item">
               <div className="flex ai-center justify-between width margin">
@@ -150,7 +258,7 @@ const Settings = () => {
 
                 <div
                   className="bottom-title update cursor"
-                  onClick={() => setOpenModal(true)}
+                  onClick={() => setModal(true)}
                 >
                   Update
                 </div>
@@ -158,6 +266,11 @@ const Settings = () => {
               <div className="value flex ai-center">*************</div>
             </div>
           </GridTwoContainer>
+        </div>
+        <div className="btn-container flex jc-end">
+          <div>
+            <Button title="Save changes" onClick={handleUpdate} />
+          </div>
         </div>
       </Inner>
     </Container>
